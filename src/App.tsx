@@ -2,7 +2,6 @@ import React from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import Kanbas from "./Kanbas"
 import Labs from "./Labs";
-import { Hash } from "crypto";
 
 function App() {
   return (
