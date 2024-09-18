@@ -105,7 +105,7 @@ export default function Dashboard() {
         <div className="wd-dashboard-course">
           <Link className="wd-dashboard-course-link"
                 to="/Kanbas/Courses/1/Home">
-            <img src="/images/reactjs.jpg" width={200} />
+            <img src="/public/images/bee.png" width={200} />
             <div>
               <h5>
                 BK1100
