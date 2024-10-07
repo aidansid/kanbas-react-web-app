@@ -197,10 +197,10 @@ export default function Lab1() {
         <input type="radio" name="radio-genre" id="wd-radio-drama"/>
         <label htmlFor="wd-radio-drama">Drama</label><br />
 
-        <input type="radio" name="radio-genre" id="wd-radio-scifi"/>
+        <input type="radio" name="color" id="wd-radio-scifi"/>
         <label htmlFor="wd-radio-scifi">Science Fiction</label><br />
 
-        <input type="radio" name="radio-genre" id="wd-radio-fantasy"/>
+        <input type="radio" name="color" id="wd-radio-fantasy"/>
         <label htmlFor="wd-radio-fantasy">Fantasy</label>
         <h5 id="wd-checkboxes">Checkboxes</h5>
         <label>Favorite movie genre:</label><br/>
