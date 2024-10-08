@@ -101,7 +101,7 @@ export default function AssignmentEditor() {
             <div className="editordescription">
               <label id="wd-assign-to"><b>Assign to</b></label>
               <select id="wd-assign-to" className="form-select">
-                <option value="ALL">All</option>
+                <option value="ALL">Everyone</option>
                 <option value="SECTION">Section</option>
                 <option value="INDIVIDUAL">Individual</option>
               </select> <br />
