@@ -1,27 +1,31 @@
 import AssignmentEditorButtons from "./AssignmentEditorButtons";
 import "./index.css";
+import { useParams, useLocation } from "react-router";
+import * as db from "../../Database";
 
 export default function AssignmentEditor() {
+  const { cid } = useParams();
+  const { pathname } = useLocation();
+  const assignments = db.assignments;
+
+  const assignment = assignments.find((assignment: any) => assignment._id === pathname.split("/")[5]);
+  const title = assignment ? assignment.title : "Assignment Name";
+  const points = assignment ? assignment.points : 0;
+  const description = assignment ? assignment.description : "No description found for this assignment.";
+  const dueDate = assignment ? assignment.dueDateNum : "";
+  const startDate = assignment ? assignment.startDateNum : "";
+
   return (
     <div id="wd-assignments-editor">
       <div id="wd-name">
         Assignment Name
         <div className="name">
-          A1
+          {title}
         </div>
       </div> <br />
       <div id="wd-description">
           <div className="editordescription">
-            <p>The assignment is <span style={{ color: "red" }}>available online</span></p>
-            <p>Submit a link to the landing page of your Web application running on Netlify.</p>
-            <p>The landing page should include the following:</p>
-            <ul>
-              <li>Your full name and section</li>
-              <li>Links to each of the lab assignments</li>
-              <li>Link to the Kanbas application</li>
-              <li>Links to all relevant source code repositories</li>
-            </ul>
-            <p>The Kanbas application should include a link to navigate back to the landing page.</p>
+            <p> {description} </p>
           </div>
       </div> <br />
       <form>
@@ -30,7 +34,7 @@ export default function AssignmentEditor() {
             <label id="wd-points" className="col-form-label">Points</label>
           </div>
           <div className="col-sm-10">
-            <input type="text" className="form-control" id="wd-points" value="100"/>
+            <input type="text" className="form-control" id="wd-points" value={points}/>
           </div>
         </div> <br />
         <div className="form row">
@@ -106,11 +110,11 @@ export default function AssignmentEditor() {
                 <option value="INDIVIDUAL">Individual</option>
               </select> <br />
               <label id="wd-due-date"><b>Due</b></label>
-              <input type="datetime-local" className="form-control" id="wd-due-date"/> <br />
+              <input type="datetime-local" className="form-control" id="wd-due-date" value={dueDate}/> <br />
               <div className="form row">
                 <div className="form-group col-md-6">
                   <label id="wd-available-from"><b>Available From</b></label>
-                  <input type="datetime-local" className="form-control" id="wd-available-from"/>
+                  <input type="datetime-local" className="form-control" id="wd-available-from" value={startDate}/>
                 </div>
                 <div className="form-group col-md-6">
                   <label id="wd-available-until"><b>Until</b></label>
