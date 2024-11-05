@@ -2,30 +2,49 @@ import AssignmentEditorButtons from "./AssignmentEditorButtons";
 import "./index.css";
 import { useParams, useLocation } from "react-router";
 import * as db from "../../Database";
+import { useDispatch } from "react-redux";
 
 export default function AssignmentEditor() {
   const { cid } = useParams();
   const { pathname } = useLocation();
   const assignments = db.assignments;
+  const aid = pathname.split("/")[5];
+  const dispatch = useDispatch();
 
-  const assignment = assignments.find((assignment: any) => assignment._id === pathname.split("/")[5]);
+  const assignment = assignments.find((assignment: any) => assignment._id === aid);
+
+  let isNewAssignment = true;
+  if (assignment?._id === aid) {
+    isNewAssignment = false;
+  }
+
   const title = assignment ? assignment.title : "Assignment Name";
   const points = assignment ? assignment.points : 0;
   const description = assignment ? assignment.description : "No description found for this assignment.";
   const dueDate = assignment ? assignment.dueDateNum : "";
   const startDate = assignment ? assignment.startDateNum : "";
 
+  const newAssignment = {
+    _id: aid, course: cid, title: title, description: description, points: points, dueDateNum: dueDate, startDateNum: startDate
+  };
+
   return (
     <div id="wd-assignments-editor">
       <div id="wd-name">
         Assignment Name
         <div className="name">
-          {title}
+          <input type="text" className="form-control" id="wd-points" defaultValue={title} onChange={(e) => {
+              newAssignment.title = e.target.value;}
+              }/>
         </div>
       </div> <br />
       <div id="wd-description">
           <div className="editordescription">
-            <p> {description} </p>
+            <p> 
+              <input type="text" id="wd-description" className="form-control" defaultValue={description} onChange={(e) => {
+                newAssignment.description = e.target.value; } 
+              }/>
+            </p>
           </div>
       </div> <br />
       <form>
@@ -34,7 +53,9 @@ export default function AssignmentEditor() {
             <label id="wd-points" className="col-form-label">Points</label>
           </div>
           <div className="col-sm-10">
-            <input type="text" className="form-control" id="wd-points" value={points}/>
+            <input type="text" className="form-control" id="wd-points" defaultValue={points} onChange={(e) => {
+              newAssignment.points = e.target.value; } 
+            }/>
           </div>
         </div> <br />
         <div className="form row">
@@ -124,7 +145,7 @@ export default function AssignmentEditor() {
             </div>
           </div>
         </div> <br />
-        <AssignmentEditorButtons />
+        <AssignmentEditorButtons isNewAssignment={isNewAssignment} assignment={newAssignment} />
       </form>
     </div>
   );
