@@ -1,25 +1,36 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import * as db from "./Database";
+import * as enrollClient from "./client";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Dashboard(
-  { courses, course, setCourse, addNewCourse,
+  { courses, course, allCourses, setCourse, addNewCourse,
     deleteCourse, updateCourse }: {
-    courses: any[]; course: any; setCourse: (course: any) => void;
+    courses: any[]; course: any; allCourses: any[]; setCourse: (course: any) => void;
     addNewCourse: () => void; deleteCourse: (course: any) => void;
     updateCourse: () => void; })
   {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = db;
   const [enroll, setEnroll] = useState(false);
-  const [courseEnrollments, setCourseEnrollments] = useState(
-    courses
-      .filter((course) => enrollments.some(
-        (enrollment) => enrollment.user === currentUser._id &&
-          enrollment.course === course._id))
-      .map((course) => course._id)
+  const [enrolledCourses, setEnrolledCourses] = useState(
+    courses.map((course) => course._id)
   );
+  const [unenrolledCourses, setUnenrolledCourses] = useState(
+    allCourses.map((course) => course._id)
+  );
+
+  const enrollCourse = async (uid: string, cid: string) => {
+    await enrollClient.enrollUserInCourse(uid, cid);
+    setEnrolledCourses([...enrolledCourses, cid]);
+    setUnenrolledCourses(unenrolledCourses.filter((c) => c !== cid));
+  };
+  const unenrollCourse = async (uid: string, cid: string) => {
+    await enrollClient.unenrollUserFromCourse(uid, cid);
+    setEnrolledCourses(enrolledCourses.filter((c) => c !== cid));
+    setUnenrolledCourses([...unenrolledCourses, cid]);
+  };
 
   return (
     <div id="wd-dashboard">
@@ -27,7 +38,7 @@ export default function Dashboard(
       {currentUser.role === "FACULTY" && (
         <><h5>New Course
           <button className="btn btn-primary float-end" id="wd-add-new-course-click"
-            onClick={() => { addNewCourse(); setCourseEnrollments(courseEnrollments => [...courseEnrollments, courses[courses.length-1]._id]); }}> Add </button>
+            onClick={() => { addNewCourse(); setEnrolledCourses(enrolledCourses => [...enrolledCourses, courses[courses.length-1]._id]); }}> Add </button>
           <button className="btn btn-warning float-end me-2"
             onClick={updateCourse} id="wd-update-course-click"> Update </button>
         </h5><br /><input defaultValue={course.name} value={course.name} className="form-control mb-2"
@@ -38,10 +49,9 @@ export default function Dashboard(
         <button className="btn btn-primary float-end" onClick={() => setEnroll(!enroll)} id="wd-enroll-click"> Enrollments </button>
       )}
       {(!enroll) && (
-        <><h2 id="wd-dashboard-published">Courses ({courseEnrollments.length})</h2><hr /><div id="wd-dashboard-courses" className="row">
+        <><h2 id="wd-dashboard-published">Courses ({enrolledCourses.length})</h2><hr /><div id="wd-dashboard-courses" className="row">
           <div className="row row-cols-1 row-cols-md-5 g-4">
             {courses
-              .filter((course) => courseEnrollments.includes(course._id))
               .map((course) => (
                 <div className="wd-dashboard-course col" style={{ width: "300px" }}>
                   <div className="card rounded-3 overflow-hidden">
@@ -58,7 +68,7 @@ export default function Dashboard(
                           <><button onClick={(event) => {
                             event.preventDefault();
                             deleteCourse(course._id);
-                            setCourseEnrollments(courseEnrollments.filter((c) => c !== course._id));
+                            enrollCourse(currentUser._id, course._id);
                           } } className="btn btn-danger float-end"
                             id="wd-delete-course-click">
                             Delete
@@ -81,7 +91,7 @@ export default function Dashboard(
       {(enroll) && (
         <><h2 id="wd-dashboard-published">Enrollment ({courses.length})</h2><hr /><div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {courses
+          {allCourses
             .map((course) => (
               <div className="wd-dashboard-course col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">
@@ -96,9 +106,9 @@ export default function Dashboard(
                     </div>
                   </Link>
                   <button className="btn btn-success" onClick={() => 
-                    setCourseEnrollments([...courseEnrollments, course._id])}> Enroll</button>
+                    enrollCourse(currentUser._id, course._id)}> Enroll</button>
                   <button className="btn btn-danger float-end" onClick={() => 
-                    setCourseEnrollments(courseEnrollments.filter((c) => c !== course._id))}> Unenroll</button>
+                    unenrollCourse(currentUser._id, course._id)}> Unenroll</button>
                 </div>
               </div>
             ))}

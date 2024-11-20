@@ -1,39 +1,41 @@
+import React, { useEffect, useState } from "react";
 import AssignmentEditorButtons from "./AssignmentEditorButtons";
 import "./index.css";
 import { useParams, useLocation } from "react-router";
-import * as db from "../../Database";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, updateAssignment } from "./reducer";
+import * as assignmentClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid } = useParams();
   const { pathname } = useLocation();
-  const assignments = db.assignments;
   const aid = pathname.split("/")[5];
-  const dispatch = useDispatch();
+  const [assignment, setAssignment] = useState<any>();
 
-  const assignment = assignments.find((assignment: any) => assignment._id === aid);
+  const fetchAssignments = async () => {
+    const a = await assignmentClient.fetchAssignment(aid);
+    setAssignment(a);
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   let isNewAssignment = true;
-  if (assignment?._id === aid) {
+  if (assignment) {
     isNewAssignment = false;
   }
 
-  const title = assignment ? assignment.title : "Assignment Name";
-  const points = assignment ? assignment.points : 0;
-  const description = assignment ? assignment.description : "No description found for this assignment.";
-  const dueDate = assignment ? assignment.dueDateNum : "";
-  const startDate = assignment ? assignment.startDateNum : "";
-
-  const newAssignment = {
-    _id: aid, course: cid, title: title, description: description, points: points, dueDateNum: dueDate, startDateNum: startDate
-  };
+  let newAssignment = {_id: aid, title: "New Assignment", course: cid, description: "No description found for this assignment.", points: 0, dueDate: "", startDate: ""};
+  if (!isNewAssignment) {
+    newAssignment = {_id: aid, title: assignment.title, course: cid, description: assignment.description, points: assignment.points, dueDate: assignment.dueDate, startDate: assignment.startDate};
+  }
 
   return (
     <div id="wd-assignments-editor">
       <div id="wd-name">
         Assignment Name
         <div className="name">
-          <input type="text" className="form-control" id="wd-points" defaultValue={title} onChange={(e) => {
+          <input type="text" className="form-control" id="wd-points" placeholder={newAssignment.title} onChange={(e) => {
               newAssignment.title = e.target.value;}
               }/>
         </div>
@@ -41,7 +43,7 @@ export default function AssignmentEditor() {
       <div id="wd-description">
           <div className="editordescription">
             <p> 
-              <input type="text" id="wd-description" className="form-control" defaultValue={description} onChange={(e) => {
+              <input type="text" id="wd-description" className="form-control" placeholder={newAssignment.description} onChange={(e) => {
                 newAssignment.description = e.target.value; } 
               }/>
             </p>
@@ -53,8 +55,8 @@ export default function AssignmentEditor() {
             <label id="wd-points" className="col-form-label">Points</label>
           </div>
           <div className="col-sm-10">
-            <input type="text" className="form-control" id="wd-points" defaultValue={points} onChange={(e) => {
-              newAssignment.points = e.target.value; } 
+            <input type="text" className="form-control" id="wd-points" placeholder={newAssignment.points.toString()} onChange={(e) => {
+              newAssignment.points = parseInt(e.target.value, 10); }
             }/>
           </div>
         </div> <br />
@@ -131,11 +133,11 @@ export default function AssignmentEditor() {
                 <option value="INDIVIDUAL">Individual</option>
               </select> <br />
               <label id="wd-due-date"><b>Due</b></label>
-              <input type="datetime-local" className="form-control" id="wd-due-date" value={dueDate}/> <br />
+              <input type="datetime-local" className="form-control" id="wd-due-date" placeholder={newAssignment.dueDate}/> <br />
               <div className="form row">
                 <div className="form-group col-md-6">
                   <label id="wd-available-from"><b>Available From</b></label>
-                  <input type="datetime-local" className="form-control" id="wd-available-from" value={startDate}/>
+                  <input type="datetime-local" className="form-control" id="wd-available-from" placeholder={newAssignment.startDate}/>
                 </div>
                 <div className="form-group col-md-6">
                   <label id="wd-available-until"><b>Until</b></label>
