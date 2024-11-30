@@ -6,11 +6,12 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 export default function Dashboard(
-  { courses, course, allCourses, setCourse, addNewCourse,
-    deleteCourse, updateCourse }: {
-    courses: any[]; course: any; allCourses: any[]; setCourse: (course: any) => void;
+  { courses, course, setCourse, addNewCourse,
+    deleteCourse, updateCourse, enrolling, setEnrolling, updateEnrollment }: {
+    courses: any[]; course: any; setCourse: (course: any) => void;
     addNewCourse: () => void; deleteCourse: (course: any) => void;
-    updateCourse: () => void; })
+    updateCourse: () => void; enrolling: boolean; setEnrolling: (enrolling: boolean) => void;
+    updateEnrollment: (courseId: string, enrolled: boolean) => void; })
   {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [enroll, setEnroll] = useState(false);
@@ -18,7 +19,7 @@ export default function Dashboard(
     courses.map((course) => course._id)
   );
   const [unenrolledCourses, setUnenrolledCourses] = useState(
-    allCourses.map((course) => course._id)
+    courses.map((course) => course._id)
   );
 
   const enrollCourse = async (uid: string, cid: string) => {
@@ -34,7 +35,10 @@ export default function Dashboard(
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <h1 id="wd-dashboard-title">Dashboard</h1> 
+      <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button><hr />
       {currentUser.role === "FACULTY" && (
         <><h5>New Course
           <button className="btn btn-primary float-end" id="wd-add-new-course-click"
@@ -91,7 +95,7 @@ export default function Dashboard(
       {(enroll) && (
         <><h2 id="wd-dashboard-published">Enrollment ({courses.length})</h2><hr /><div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {allCourses
+          {courses
             .map((course) => (
               <div className="wd-dashboard-course col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">
