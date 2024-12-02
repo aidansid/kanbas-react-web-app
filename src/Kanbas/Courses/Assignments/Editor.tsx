@@ -7,44 +7,33 @@ import { addAssignment, updateAssignment } from "./reducer";
 import * as assignmentClient from "./client";
 
 export default function AssignmentEditor() {
-  const { cid } = useParams();
   const { pathname } = useLocation();
   const aid = pathname.split("/")[5];
-  const [assignment, setAssignment] = useState<any>();
+  const [assignment, setAssignment] = useState<any>({title: "", description: "", points: 0, startDate: "", dueDate: ""});
 
-  const fetchAssignments = async () => {
+  const fetchAssignment = async () => {
     const a = await assignmentClient.fetchAssignment(aid);
     setAssignment(a);
   };
   useEffect(() => {
-    fetchAssignments();
-  }, []);
-
-  let isNewAssignment = true;
-  if (assignment) {
-    isNewAssignment = false;
-  }
-
-  let newAssignment = {_id: aid, title: "New Assignment", course: cid, description: "No description found for this assignment.", points: 0, dueDate: "", startDate: ""};
-  if (!isNewAssignment) {
-    newAssignment = {_id: aid, title: assignment.title, course: cid, description: assignment.description, points: assignment.points, dueDate: assignment.dueDate, startDate: assignment.startDate};
-  }
+    fetchAssignment();
+  }, [aid]);
 
   return (
     <div id="wd-assignments-editor">
       <div id="wd-name">
         Assignment Name
         <div className="name">
-          <input type="text" className="form-control" id="wd-points" placeholder={newAssignment.title} onChange={(e) => {
-              newAssignment.title = e.target.value;}
+          <input type="text" className="form-control" id="wd-points" placeholder={assignment.title} onChange={(e) => {
+              assignment.title = e.target.value;}
               }/>
         </div>
       </div> <br />
       <div id="wd-description">
           <div className="editordescription">
             <p> 
-              <input type="text" id="wd-description" className="form-control" placeholder={newAssignment.description} onChange={(e) => {
-                newAssignment.description = e.target.value; } 
+              <input type="text" id="wd-description" className="form-control" placeholder={assignment.description} onChange={(e) => {
+                assignment.description = e.target.value; } 
               }/>
             </p>
           </div>
@@ -55,8 +44,8 @@ export default function AssignmentEditor() {
             <label id="wd-points" className="col-form-label">Points</label>
           </div>
           <div className="col-sm-10">
-            <input type="text" className="form-control" id="wd-points" placeholder={newAssignment.points.toString()} onChange={(e) => {
-              newAssignment.points = parseInt(e.target.value, 10); }
+            <input type="text" className="form-control" id="wd-points" placeholder={assignment.points.toString()} onChange={(e) => {
+              assignment.points = parseInt(e.target.value, 10); }
             }/>
           </div>
         </div> <br />
@@ -133,11 +122,11 @@ export default function AssignmentEditor() {
                 <option value="INDIVIDUAL">Individual</option>
               </select> <br />
               <label id="wd-due-date"><b>Due</b></label>
-              <input type="datetime-local" className="form-control" id="wd-due-date" placeholder={newAssignment.dueDate}/> <br />
+              <input type="datetime-local" className="form-control" id="wd-due-date" placeholder={assignment.dueDate}/> <br />
               <div className="form row">
                 <div className="form-group col-md-6">
                   <label id="wd-available-from"><b>Available From</b></label>
-                  <input type="datetime-local" className="form-control" id="wd-available-from" placeholder={newAssignment.startDate}/>
+                  <input type="datetime-local" className="form-control" id="wd-available-from" placeholder={assignment.startDate}/>
                 </div>
                 <div className="form-group col-md-6">
                   <label id="wd-available-until"><b>Until</b></label>
@@ -147,7 +136,7 @@ export default function AssignmentEditor() {
             </div>
           </div>
         </div> <br />
-        <AssignmentEditorButtons isNewAssignment={isNewAssignment} assignment={newAssignment} />
+        <AssignmentEditorButtons assignment={assignment} />
       </form>
     </div>
   );

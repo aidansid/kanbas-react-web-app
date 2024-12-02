@@ -46,11 +46,11 @@ export default function Assignments() {
                 <TfiWrite className="me-2 fs-3" color="green"/>
                 <LessonControlButtons assignmentId={assignment._id} deleteAssignment={(assignmentId) => removeAssignment(assignmentId)} />
                 <span className="title" >
-                  <b><a href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} style={{ textDecoration: "none", color: "black" }}>{assignment.title}</a></b>
+                  <b><a href={`#/Kanbas/Courses/${cid}/assignments/${assignment._id}`} style={{ textDecoration: "none", color: "black" }}>{assignment.title}</a></b>
                 </span>
                 <p className="description">
                   <span style={{ color: "red" }}>Multiple Modules</span> | <b>Not available until</b> {assignment.startDate} | <br />
-                  <b>Due</b> {assignment.dueDate} | {assignment.points} points
+                  <b>Due</b> {assignment.dueDate} | <b>Points</b> {assignment.points}
                 </p>
               </li>
             ))}

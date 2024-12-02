@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { enrollments } from "./Database";
+import * as courseClient from "./Courses/client";
+import { useState, useEffect } from "react";
 
-export default function ProtectedRoute1({ children, cid }: { children: any; cid: string }) { 
+export default function ProtectedRoute({ children, cid }: { children: any; cid: string }) { 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   
-  if (currentUser && enrollments.find((enrollment: any) => enrollment.course === cid && enrollment.user === currentUser._id)) {
+  if (currentUser) {
     return children;
   } else {
     return <Navigate to="/Kanbas/Dashboard" />;
 }}
+function dispatch(arg0: void) {
+  throw new Error("Function not implemented.");
+}
+

@@ -8,15 +8,15 @@ import PeopleTable from "./People/Table";
 import { courses } from "../Database";
 import { FaAlignJustify } from "react-icons/fa6";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
-import ProtectedRoute1 from "../ProtectedRoute";
+import ProtectedRoute from "../ProtectedRoute";
 import { addAssignment } from "./Assignments/reducer";
 import QuizEditor from "./Quizzes/Editor";
+import * as courseClient from "./client";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation();
-
 
   return (
     <div id="wd-courses">
@@ -29,7 +29,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
           <CoursesNavigation />
         </div>
         <div className="flex-fill">
-          <ProtectedRoute1 cid={cid || ""}><Routes>
+          <ProtectedRoute cid={cid || ""}><Routes>
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
             <Route path="Assignments" element={<Assignments />} />
@@ -37,7 +37,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:qid" element={<QuizEditor />} />
             <Route path="People" element={<PeopleTable />} />
-          </Routes></ProtectedRoute1>
+          </Routes></ProtectedRoute>
         </div>
       </div>
     </div>

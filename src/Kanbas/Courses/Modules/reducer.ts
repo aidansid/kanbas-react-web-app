@@ -9,10 +9,10 @@ const modulesSlice = createSlice({
   reducers: {
     addModule: (state, { payload: module }) => {
       const newModule: any = {
-        _id: new Date().getTime().toString(),
-        lessons: [],
+        _id: module._id,
         name: module.name,
         course: module.course,
+        lessons: [],
       };
       state.modules = [...state.modules, newModule] as any;
     },
