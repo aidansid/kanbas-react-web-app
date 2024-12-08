@@ -9,11 +9,9 @@ import { useState } from "react";
 export default function AssignmentControls() {
   const { cid } = useParams();
   const dispatch = useDispatch();
-  const [aid, setAid] = useState("");
   const createAssignment = async () => {
     const a = { title: "New Assignment", course: cid, description: "", points: 0, startDate: "", dueDate: ""};
     const newAssignment = await assignmentClient.addAssignment(a);
-    setAid(newAssignment._id);
     dispatch(addAssignment(newAssignment));
   };
 

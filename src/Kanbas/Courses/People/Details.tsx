@@ -7,7 +7,7 @@ import { FaPencil } from "react-icons/fa6";
 import { FaCheck, FaUserCircle } from "react-icons/fa";
 
 export default function PeopleDetails() {
-  const { uid} = useParams();
+  const {uid} = useParams();
   const [user, setUser] = useState<any>({});
   const navigate = useNavigate();
   const [name, setName] = useState("");

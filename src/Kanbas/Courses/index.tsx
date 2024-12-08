@@ -12,6 +12,10 @@ import ProtectedRoute from "../ProtectedRoute";
 import { addAssignment } from "./Assignments/reducer";
 import QuizEditor from "./Quizzes/Editor";
 import * as courseClient from "./client";
+import QuizDetails from "./Quizzes/Details";
+import QuizPreview from "./Quizzes/Preview";
+import Grades from "./Grades";
+import QuizGrades from "./Quizzes/Grades";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
@@ -22,8 +26,9 @@ export default function Courses({ courses }: { courses: any[]; }) {
     <div id="wd-courses">
       <h2 className="text-danger">
         <FaAlignJustify className="me-4 fs-4 mb-1" />
-        {course && course.name +' > ' + pathname.split("/")[4]}
-      </h2>
+        {course && course.name +' > ' + pathname.split("/")[4]}{course && course.name && pathname.split("/")[4] === "Quizzes" && 
+          (pathname.split("/")[5] === "Edit" || pathname.split("/")[5] === "Detail") && " > " + pathname.split("/")[5]}
+      </h2><hr />
       <div className="d-flex">
         <div className="d-none d-md-block">
           <CoursesNavigation />
@@ -35,7 +40,11 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Assignments" element={<Assignments />} />
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="Quizzes" element={<Quizzes />} />
-            <Route path="Quizzes/:qid" element={<QuizEditor />} />
+            <Route path="Quizzes/Edit/:qid" element={<QuizEditor />} />
+            <Route path="Quizzes/Detail/:qid" element={<QuizDetails />} />
+            <Route path="Quizzes/Preview/:qid" element={<QuizPreview />} />
+            <Route path="Grades" element={<Grades />} />
+            <Route path="Grades/:qid" element={<QuizGrades />} />
             <Route path="People" element={<PeopleTable />} />
           </Routes></ProtectedRoute>
         </div>
