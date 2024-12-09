@@ -3,9 +3,8 @@ const axiosWithCredentials = axios.create({ withCredentials: true });
 export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 console.log("REMOTE_SERVER", REMOTE_SERVER);
 let temp = REMOTE_SERVER;
-if (REMOTE_SERVER?.includes("/")) {
-  temp = REMOTE_SERVER.split("/")[1];
-}
+temp = "https://" + temp;
+console.log("REMOTE_SERVER", temp);
 export const USERS_API = `${temp}/api/users`;
 
 export const signin = async (credentials: any) => {
