@@ -1,7 +1,9 @@
 import axios from "axios";
 const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
-const ASSIGNMENTS_API = `${REMOTE_SERVER}/api/assignments`;
+let temp = REMOTE_SERVER;
+temp = "https://" + temp;
+const ASSIGNMENTS_API = `${temp}/api/assignments`;
 
 export const addAssignment = async (assignment: any) => {
   const response = await axiosWithCredentials.post(ASSIGNMENTS_API, assignment);
