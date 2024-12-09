@@ -6,8 +6,6 @@ export default function TOC() {
 
     return (
       <ul className="nav nav-pills">
-        Aidan Sidloski
-        Section CS4550 02 F24
         <li className="nav-item">
           <a id="wd-a" href="#/Labs" className="nav-link">
             Labs
@@ -49,13 +47,17 @@ export default function TOC() {
         </li>
         <li className="nav-item">
           <a id="wd-github" href="https://github.com/aidansid/kanbas-react-web-app" className="nav-link">
-            Github
+            Client Github
           </a>
+        </li>
+        <li className="nav-item">
+          <a id="wd-github" href="https://github.com/aidansid/kanbas-node-server-app" className="nav-link">
+            Server Github
+          </a>
+        </li>
+        <li className="nav-item">
           <a id="wd-render" href="https://kanbas-node-server-app-08z0.onrender.com" className="nav-link">
             Render
-          </a>
-          <a id="wd-heroku" href="https://kanbas-node-server-app0-685dc6950924.herokuapp.com" className="nav-link">
-            Heroku
           </a>
         </li>
       </ul>

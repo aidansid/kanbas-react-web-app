@@ -13,6 +13,7 @@ export default function Labs() {
     <Provider store={store}>
       <div className="container-fluid">
         <h1>Labs</h1>
+        <h4>Aidan Sidloski | Section CS4550 02 F24</h4>
         <TOC />
         <Routes>
           <Route path="/" element={<Navigate to="Lab1" />} />
