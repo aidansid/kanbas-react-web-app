@@ -1,7 +1,9 @@
 import axios from "axios";
 const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
-const QUIZ_API = `${REMOTE_SERVER}/api/quizzes`;
+let temp = REMOTE_SERVER;
+temp = "https://" + temp;
+const QUIZ_API = `${temp}/api/quizzes`;
 
 export const fetchQuizzesForCourse = async (courseId: string) => {
   const response = await axiosWithCredentials.get(`${QUIZ_API}/course/${courseId}`);

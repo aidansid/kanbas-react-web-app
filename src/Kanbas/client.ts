@@ -1,6 +1,8 @@
 import axios from "axios";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
-const ENROLL_API = `${REMOTE_SERVER}/api/enrollments`;
+let temp = REMOTE_SERVER;
+temp = "https://" + temp;
+const ENROLL_API = `${temp}/api/enrollments`;
 
 export const enrollUserInCourse = async (userId: string, courseId: string) => {
   const response = await axios.post(`${ENROLL_API}/enroll`, { userId, courseId });
